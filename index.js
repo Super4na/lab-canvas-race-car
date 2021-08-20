@@ -48,11 +48,11 @@ this.y =y;
         context.drawImage(this.image, this.x, this.y, 50, 80)
     }
     moveRight() {
-        this.x +=3;
+        this.x +=5;
     }
 
     moveLeft() {
-        this.x -=3;
+        this.x -=5;
     }
 
     
@@ -75,10 +75,10 @@ this.y =y;
 
     crashWidth(component) {
         return !(
-            this.bottom() < component.top() || 
-            this.top() >component.bottom() || 
-            this.right() < component.left() || 
-            this.left() > component.right()    
+            this.bottom() <= component.top() || 
+            this.top() >= component.bottom() || 
+            this.right() > component.left() || 
+            this.left() < component.right()    
         );
     }
     
@@ -153,29 +153,31 @@ game.frame++;
 if(game.frame%120 === 0) {
 
     const minWidth = 10;
-    const maxWidth = 390;
+    const maxWidth = 300;
     const randomWidth = Math.floor(
         Math.random()*(maxWidth-minWidth+1) + minWidth);
+        const randomWidth1 = Math.floor(
+            Math.random()*(maxWidth-minWidth+1) + minWidth);
     
-    const minGap = 60;
+    const minGap = 70;
     const maxGap = 100;
     const randomGap = Math.floor(
             Math.random()*(maxGap-minGap+1)+minGap);
 
     const obstacleLeft = new Obstacle(
+            randomWidth1,
             0,
-            0,
-            randomWidth,
-            10,
+            30,
+            30,
             
         );
     game.obstacles.push(obstacleLeft)
 
         const obstacleRight = new Obstacle(
-            randomGap+randomWidth,
+            500-randomWidth,
             0,
-            randomGap,
-            10,
+            30,
+            30,
             
         );
 
@@ -187,12 +189,13 @@ if(game.frame%120 === 0) {
 
 function updateCanvas() {
     game.clear();
+    game.score();
     car.draw();
     car.moveRight();
     car.moveLeft();
     drawObstacles();
     checkGameOver();
-    game.score();
+    
 };
 
 function checkGameOver() {
