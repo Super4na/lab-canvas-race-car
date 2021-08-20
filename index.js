@@ -85,22 +85,38 @@ this.y =y;
 }
 
 class Obstacle {
-    constructor(x,y, width, height, color) {
+    constructor(x,y, width, height) {
         this.x =x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.color =color;
+        this.color = "red";
         
        
     }
-    draw() {
-        context.fillstyle = this.color;
+    draw1() {
+        context.fillstyle = this.color ;
         context.fillRect(this.x,this.y,this.width,this.height);
     }
 
     down() {
     this.y +=1;
+    }
+
+    left() {
+        return this.x;
+
+    }
+
+    right(){
+        return this.x + this.width;
+    }
+
+    top() {
+        return this.y;
+    }
+    bottom() {
+        return this.y+this.height;
     }
 
 }
@@ -126,22 +142,23 @@ document.addEventListener(`keydown`, (e) => {
 });
 
 function drawObstacles() {
+
     game.obstacles.forEach((obstacle)=>{
         obstacle.y += 1;
-        obstacle.draw();
+        obstacle.draw1();
     });
 
 game.frame++;
 
 if(game.frame%120 === 0) {
 
-    const minWidth = 100;
-    const maxWidth = 400;
+    const minWidth = 10;
+    const maxWidth = 390;
     const randomWidth = Math.floor(
         Math.random()*(maxWidth-minWidth+1) + minWidth);
     
-    const minGap = 50;
-    const maxGap = 80;
+    const minGap = 60;
+    const maxGap = 100;
     const randomGap = Math.floor(
             Math.random()*(maxGap-minGap+1)+minGap);
 
@@ -150,16 +167,16 @@ if(game.frame%120 === 0) {
             0,
             randomWidth,
             10,
-            "red"
+            
         );
     game.obstacles.push(obstacleLeft)
 
         const obstacleRight = new Obstacle(
-            randomWidth+randomGap,
+            randomGap+randomWidth,
             0,
-            randomWidth,
+            randomGap,
             10,
-            "red"
+            
         );
 
         game.obstacles.push(obstacleRight)
@@ -180,7 +197,7 @@ function updateCanvas() {
 
 function checkGameOver() {
     const crashed = game.obstacles.some((obstacle)=>{
-        return player.crashWidth(obstacle) === true;
+        return car.crashWidth(obstacle) === true;
     });
 
     if (crashed) {
